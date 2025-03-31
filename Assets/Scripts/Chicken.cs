@@ -33,6 +33,8 @@ public class Chicken : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
         animator.enabled = false;
 
+        transform.position = new Vector3(Random.Range(-3.3f, 3.3f), transform.position.y, transform.position.z);
+
         dest.x = rb.position.x;
         dest.y = rb.position.y;
     }
@@ -81,7 +83,7 @@ public class Chicken : MonoBehaviour
                     if (rnd == 999)
                     {
                         dest.x = Random.Range(-3.3f, 3.3f);
-                        print(dest.x);
+                        //print(dest.x);
 
                         if (dest.x < rb.position.x)
                         {
@@ -93,7 +95,7 @@ public class Chicken : MonoBehaviour
                         }
 
                         isRoaming = true;
-                        print(isRoamingLeft);
+                        //print(isRoamingLeft);
                     }
                 }
 
@@ -174,5 +176,10 @@ public class Chicken : MonoBehaviour
     public void StartSpinForReal()
     {
         StartState(ChickenState.Spinning);
+    }
+
+    public void Explode()
+    {
+        animator.SetBool("isExploding", true);
     }
 }

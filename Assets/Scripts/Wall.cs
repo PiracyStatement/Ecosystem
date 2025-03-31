@@ -26,7 +26,7 @@ public class Wall : MonoBehaviour
         int bCount = collision.gameObject.GetComponent<Fish>().bouncedCount;
         bCount++;
 
-        if (bCount > 5)
+        if (bCount > collision.gameObject.GetComponent<Fish>().bouncedRequired)
         {
             collision.gameObject.GetComponent<Fish>().bouncedCount = 0;
             collision.gameObject.GetComponent<Fish>().StartSpin();

@@ -1,4 +1,3 @@
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static Chicken;
@@ -27,6 +26,7 @@ public class Fish : MonoBehaviour
     public AudioSource explosion;
 
     public int bouncedCount = 0;
+    public int bouncedRequired;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void SlideAndBounce()
@@ -48,6 +48,10 @@ public class Fish : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         animator.enabled = false;
+        bouncedRequired = Random.Range(4, 8);
+
+        transform.position = new Vector3(Random.Range(-3f, 3f), Random.Range(-3f, 3f), transform.position.z);
+
         SlideAndBounce();
     }
 
@@ -56,9 +60,9 @@ public class Fish : MonoBehaviour
     {
         UpdateState();
 
-        if (Input.GetKey(KeyCode.Alpha1))
+        if (Input.GetKey("escape"))
         {
-            SceneManager.LoadScene("SampleScene");
+            Application.Quit();
         }
     }
 
@@ -110,7 +114,8 @@ public class Fish : MonoBehaviour
             case FishState.Spinning:
                 if (!funkyTown.isPlaying)
                 {
-                    explosion.Play();
+                    StartState(FishState.Staring);
+                    Explode();
                 }
                 break;
         }
@@ -139,5 +144,21 @@ public class Fish : MonoBehaviour
     public void StartSpinForReal()
     {
         StartState(FishState.Spinning);
+    }
+
+    public void Explode()
+    {
+        explosion.Play();
+        animator.SetBool("isExploding", true);
+
+        GameObject.Find("Chicken").GetComponent<Chicken>().Explode();
+        GameObject.Find("Cockroach").GetComponent<Cockroach>().Explode();
+
+        Invoke("Restart", 3f);
+    }
+
+    void Restart()
+    {
+        SceneManager.LoadScene("SampleScene");
     }
 }
